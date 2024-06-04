@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainManager : MonoBehaviour
 {
@@ -10,18 +11,22 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
-    public Text ScoreText;
+    public TMP_Text ScoreText;
     public GameObject GameOverText;
+    public TMP_Text BestScoreText;
+    //public Text BestScoreNumber;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
+    //public TMP_Text currentScorer;
 
     
     // Start is called before the first frame update
     void Start()
     {
+        
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -36,12 +41,15 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+        //BestScoreText.text = "Best Score : " + ScoreManager.Instance.scorerName.text + " : " + "0";
+        //currentScorer.text = ScoreManager.Instance.scorerName.text;
     }
 
     private void Update()
     {
         if (!m_Started)
         {
+            BestScoreText.text = "Best Score : " + /*ScoreManager.Instance.scorerName.text*/" : " + ScoreManager.Instance.BestPoint;
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 m_Started = true;
@@ -55,6 +63,8 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
+            SetBestScore();
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -73,4 +83,34 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
+
+    public void SetBestScore()
+    {
+        ScoreManager.Instance.LoadPoint();
+        if (m_Points>ScoreManager.Instance.BestPoint)
+        {
+            //if (currentScorer!= ScoreManager.Instance.scorerName)
+            //{
+                //ScoreManager.Instance.scorerName.text = currentScorer.text;
+                ScoreManager.Instance.BestPoint = m_Points;
+                ScoreManager.Instance.SavePoint();
+            //}
+            //else
+           // {
+           //     ScoreManager.Instance.BestPoint = m_Points;
+               // ScoreManager.Instance.SavePoint();
+          //  }
+
+        }
+        BestScoreText.text = "Best Score : " +/*ScoreManager.Instance.scorerName.text+*/" : " + ScoreManager.Instance.BestPoint;
+    }
+
+  
+
+    /*class SaveData
+    {
+        public Text BestScoreNumber;
+        public Text BestScoreName;
+    } */
+
 }
