@@ -10,28 +10,31 @@ public class ScoreManager : MonoBehaviour
     public TMP_InputField scorerName;
     public TMP_Text bestScoreMenu;
     public int BestPoint;
+    public string BestScorerName;
     
 
     private void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        LoadPoint();
-        bestScoreMenu.text = "Best Score : "/*+scorerName.text*/+" : " + BestPoint;
+        bestScoreMenu.text = "Best Score : "/*+BestScorerName*/+" : " + BestPoint;
+        Debug.Log(BestScorerName);
     }
 
    [System.Serializable]
    class SaveData
     {
         public int BestPoint;
-        //public TMP_InputField scorerName;
+        public string BestScorerName;
+        //public string ScorerName;
     }
 
     public void SavePoint()
     {
         SaveData data = new SaveData();
         data.BestPoint = BestPoint;
-        //data.scorerName = scorerName;
+        data.BestScorerName = BestScorerName;
+        //data.ScorerName = scorerName.text;
         
         
         string json = JsonUtility.ToJson(data);
@@ -47,7 +50,8 @@ public class ScoreManager : MonoBehaviour
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
             BestPoint = data.BestPoint;
-            //scorerName = data.scorerName;
+            BestScorerName = data.BestScorerName;
+            //scorerName.text = data.ScorerName;
 
         }
     }

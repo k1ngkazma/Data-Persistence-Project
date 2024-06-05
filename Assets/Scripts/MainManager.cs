@@ -20,7 +20,7 @@ public class MainManager : MonoBehaviour
     private int m_Points;
     
     private bool m_GameOver = false;
-    //public TMP_Text currentScorer;
+    private string currentScorer;
 
     
     // Start is called before the first frame update
@@ -41,15 +41,24 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
-        //BestScoreText.text = "Best Score : " + ScoreManager.Instance.scorerName.text + " : " + "0";
-        //currentScorer.text = ScoreManager.Instance.scorerName.text;
+        
+        //currentScorer = ScoreManager.Instance.scorerName.text;
+       
+        
+        ScoreManager.Instance.LoadPoint();
+        BestScoreText.text = "Best Score : " + ScoreManager.Instance.BestScorerName + " : " + ScoreManager.Instance.BestPoint;
+        Debug.Log(ScoreManager.Instance.scorerName.text);
+        Debug.Log(ScoreManager.Instance.BestScorerName);
+        Debug.Log(ScoreManager.Instance.BestPoint);
     }
 
     private void Update()
     {
         if (!m_Started)
         {
-            BestScoreText.text = "Best Score : " + /*ScoreManager.Instance.scorerName.text*/" : " + ScoreManager.Instance.BestPoint;
+            
+            ScoreManager.Instance.LoadPoint();
+            BestScoreText.text = "Best Score : " + ScoreManager.Instance.BestScorerName + " : " + ScoreManager.Instance.BestPoint;
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 m_Started = true;
@@ -59,17 +68,25 @@ public class MainManager : MonoBehaviour
 
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+
+                
+
             }
         }
         else if (m_GameOver)
         {
             SetBestScore();
+            
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                //Debug.Log(currentScorer);
+                //Debug.Log(ScoreManager.Instance.scorerName.text);
+
             }
         }
+        //Debug.Log(ScoreManager.Instance.scorerName.text);
     }
 
     void AddPoint(int point)
@@ -87,30 +104,23 @@ public class MainManager : MonoBehaviour
     public void SetBestScore()
     {
         ScoreManager.Instance.LoadPoint();
+        
         if (m_Points>ScoreManager.Instance.BestPoint)
         {
-            //if (currentScorer!= ScoreManager.Instance.scorerName)
-            //{
-                //ScoreManager.Instance.scorerName.text = currentScorer.text;
+           
+                ScoreManager.Instance.BestScorerName = ScoreManager.Instance.scorerName.text;
                 ScoreManager.Instance.BestPoint = m_Points;
                 ScoreManager.Instance.SavePoint();
-            //}
-            //else
-           // {
-           //     ScoreManager.Instance.BestPoint = m_Points;
-               // ScoreManager.Instance.SavePoint();
-          //  }
+            Debug.Log("best scorer name"+ScoreManager.Instance.BestScorerName);
+            
+           
 
         }
-        BestScoreText.text = "Best Score : " +/*ScoreManager.Instance.scorerName.text+*/" : " + ScoreManager.Instance.BestPoint;
+        BestScoreText.text = "Best Score : " +ScoreManager.Instance.BestScorerName+" : " + ScoreManager.Instance.BestPoint;
     }
 
   
 
-    /*class SaveData
-    {
-        public Text BestScoreNumber;
-        public Text BestScoreName;
-    } */
+ 
 
 }

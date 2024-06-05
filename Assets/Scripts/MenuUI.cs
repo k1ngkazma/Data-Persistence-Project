@@ -13,6 +13,7 @@ public class MenuUI : MonoBehaviour
    public void StartNew()
     {
         SceneManager.LoadScene(1);
+        ScoreManager.Instance.SavePoint();
     }
 
     public void Exit()
@@ -27,6 +28,13 @@ public class MenuUI : MonoBehaviour
     //Gives user input name to scoremanager
     public void NewNameSelected()
     {
+       
        ScoreManager.Instance.scorerName = inputField;
+    }
+
+    public void ResetBestScore()
+    {
+        ScoreManager.Instance.BestPoint = 0;
+        ScoreManager.Instance.SavePoint();
     }
 }
