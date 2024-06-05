@@ -10,10 +10,22 @@ using TMPro;
 public class MenuUI : MonoBehaviour
 {
     public TMP_InputField inputField;
-   public void StartNew()
+
+    //public static MenuUI Instance;
+    //private void Awake()
+    //{
+        //Instance = this;
+        //DontDestroyOnLoad(gameObject);
+    //}
+
+
+
+    public void StartNew()
     {
+        
         SceneManager.LoadScene(1);
-        ScoreManager.Instance.SavePoint();
+        
+
     }
 
     public void Exit()
@@ -29,12 +41,16 @@ public class MenuUI : MonoBehaviour
     public void NewNameSelected()
     {
        
-       ScoreManager.Instance.scorerName = inputField;
+       ScoreManager.Instance.scorerName = inputField.text;
+        ScoreManager.Instance.SaveScorer();
+        
     }
 
     public void ResetBestScore()
     {
         ScoreManager.Instance.BestPoint = 0;
+        ScoreManager.Instance.BestScorerName = "---";
         ScoreManager.Instance.SavePoint();
+        SceneManager.LoadScene(0);
     }
 }

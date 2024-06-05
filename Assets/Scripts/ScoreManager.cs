@@ -7,26 +7,30 @@ using System.IO;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
-    public TMP_InputField scorerName;
+    public string scorerName;
     public TMP_Text bestScoreMenu;
     public int BestPoint;
     public string BestScorerName;
-    
+    public string textTest = "string show?";
 
     private void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        bestScoreMenu.text = "Best Score : "/*+BestScorerName*/+" : " + BestPoint;
+        Debug.Log(textTest);
         Debug.Log(BestScorerName);
+        Debug.Log(scorerName);
+        LoadPoint();
+        bestScoreMenu.text = "Best Score : "+BestScorerName+ " : " + BestPoint;
+        
     }
 
-   [System.Serializable]
-   class SaveData
+    [System.Serializable]
+    class SaveData
     {
         public int BestPoint;
         public string BestScorerName;
-        //public string ScorerName;
+        public string ScorerName;
     }
 
     public void SavePoint()
@@ -34,11 +38,11 @@ public class ScoreManager : MonoBehaviour
         SaveData data = new SaveData();
         data.BestPoint = BestPoint;
         data.BestScorerName = BestScorerName;
-        //data.ScorerName = scorerName.text;
-        
-        
+
+
+
         string json = JsonUtility.ToJson(data);
-       
+
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
@@ -51,8 +55,29 @@ public class ScoreManager : MonoBehaviour
             SaveData data = JsonUtility.FromJson<SaveData>(json);
             BestPoint = data.BestPoint;
             BestScorerName = data.BestScorerName;
-            //scorerName.text = data.ScorerName;
+            
 
         }
+    }
+
+    public void SaveScorer()
+    {
+        SaveData data = new SaveData();
+        data.ScorerName = scorerName;
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefilescorer.json", json);
+    }
+    public void LoadScorer()
+    {
+        string path = Application.persistentDataPath + "/savefilescorer.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            scorerName = data.ScorerName;
+        }
+
     }
 }
